@@ -1,9 +1,9 @@
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import { NextFunction, Request, Response } from "express";
 
-import { ErrorCode } from "@/pkg/e/code";
-import { ErrorMessages } from "@/pkg/e/msg";
-import { AppError } from "@/pkg/e/app_error";
+import { ErrorCode } from "../e/code.js";
+import { ErrorMessages } from "../e/msg.js";
+import { AppError } from "../e/app_error.js";
 
 interface ResponseMethods {
   successResponse(httpCode: StatusCodes, data: object): void;

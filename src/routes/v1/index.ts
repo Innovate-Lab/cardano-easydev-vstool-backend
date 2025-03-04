@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import walletRouter from "@/routes/v1/wallet";
+import walletRouter from "./wallet.js";
 
 const router: Router = Router();
 

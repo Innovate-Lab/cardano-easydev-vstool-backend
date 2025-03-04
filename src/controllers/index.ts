@@ -1,4 +1,4 @@
-import { walletController } from "@/controllers/wallet";
+import { walletController } from "./wallet.js";
 
 export {
     walletController,
