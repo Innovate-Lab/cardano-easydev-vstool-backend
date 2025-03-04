@@ -23,9 +23,35 @@ const generateSeedPhrase: RequestHandler = async (req, res, next) => {
     });
 };
 
+const connectWalletWithPrivateKey: RequestHandler = async (req, res, next) => {
+    const appExpress = new CustomExpress(req, res, next);
+
+    const { privateKey } = req.body;
+
+    const address = await lucidService.connectWalletWithPrivateKey(privateKey);
+
+    appExpress.response201({
+        address
+    });
+};
+
+const connectWalletWithSeedPhrase: RequestHandler = async (req, res, next) => {
+    const appExpress = new CustomExpress(req, res, next);
+
+    const { seedPhrase } = req.body;
+
+    const address = await lucidService.connectWalletWithSeedPhrase(seedPhrase);
+
+    appExpress.response201({
+        address
+    });
+};
+
 const walletController = {
     generatePrivateKey,
     generateSeedPhrase,
+    connectWalletWithPrivateKey,
+    connectWalletWithSeedPhrase,
 };
 
 export { walletController };
