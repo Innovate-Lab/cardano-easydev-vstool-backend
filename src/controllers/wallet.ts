@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 
 import { CustomExpress } from "../pkg/app/response.js";
 import { lucidService } from "../services/lucid.js";
+import { blockforstService } from "../services/blockforst.js";
 
 const generatePrivateKey: RequestHandler = async (req, res, next) => {
     const appExpress = new CustomExpress(req, res, next);
@@ -47,11 +48,37 @@ const connectWalletWithSeedPhrase: RequestHandler = async (req, res, next) => {
     });
 };
 
+const getUtxosByAddress: RequestHandler = async (req, res, next) => {
+    const appExpress = new CustomExpress(req, res, next);
+
+    const { address } = req.query as { address: string };
+
+    const utxos = await blockforstService.getUtxosByAddress(address);
+
+    appExpress.response201({
+        utxos
+    });
+};
+
+const getNFTsByAddress: RequestHandler = async (req, res, next) => {
+    const appExpress = new CustomExpress(req, res, next);
+
+    const { address } = req.query as { address: string };
+
+    const nfts = await blockforstService.getNFTs(address);
+
+    appExpress.response201({
+        nfts
+    });
+};
+
 const walletController = {
     generatePrivateKey,
     generateSeedPhrase,
     connectWalletWithPrivateKey,
     connectWalletWithSeedPhrase,
+    getUtxosByAddress,
+    getNFTsByAddress
 };
 
 export { walletController };

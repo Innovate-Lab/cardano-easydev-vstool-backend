@@ -75,4 +75,4 @@ class BlockforstService {
     }
 }
 
-export default BlockforstService;
+export const blockforstService = new BlockforstService();
