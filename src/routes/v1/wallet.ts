@@ -7,29 +7,13 @@ router.post("/private-key", walletController.generatePrivateKey);
 
 router.post("/seed-phrase", walletController.generateSeedPhrase);
 
-// router.post("/connect-private-key", async (req, res, next) => {
-//     const appExpress = new CustomExpress(req, res, next);
+router.post("/connect-private-key", walletController.connectWalletWithPrivateKey)
 
-//     const { privateKey } = req.body;
+router.post("/connect-seed-phrase", walletController.connectWalletWithSeedPhrase)
 
-//     const address = await lucidService.connectWalletWithPrivateKey(privateKey);
+router.get("/utxos", walletController.getUtxosByAddress)
 
-//     appExpress.response201({
-//         address
-//     });
-// })
-
-// router.post("/connect-seed-phrase", async (req, res, next) => {
-//     const appExpress = new CustomExpress(req, res, next);
-
-//     const { seedPhrase } = req.body;
-
-//     const address = await lucidService.connectWalletWithSeedPhrase(seedPhrase);
-
-//     appExpress.response201({
-//         address
-//     });
-// })
+router.get("/nfts", walletController.getNFTsByAddress)
 
 export default router;
 

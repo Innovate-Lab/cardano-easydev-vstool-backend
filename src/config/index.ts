@@ -69,6 +69,10 @@ const config: Config = {
     maxActive: parseInt(process.env.REDIS_MAX_ACTIVE || "30", 10),
     idleTimeout: parseInt(process.env.REDIS_IDLE_TIMEOUT || "200", 10),
   },
+  blockfrost: {
+    projectId: process.env.BLOCKFROST_PROJECT_ID || "preprod7jAxIo4RPBj7pDtKPsG33AIj0ukZGNXk",
+    baseUrl: process.env.BLOCKFROST_BASE_URL || "https://cardano-preprod.blockfrost.io/api/v0",
+  },
 };
 
 export { config };

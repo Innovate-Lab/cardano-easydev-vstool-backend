@@ -69,6 +69,11 @@ export interface RedisConfig {
   idleTimeout: number;
 }
 
+export interface BlockfrostConfig {
+  projectId: string;
+  baseUrl: string;
+}
+
 export interface Config {
   server: ServerConfig;
   // websocket: WebSocketConfig;
@@ -76,4 +81,5 @@ export interface Config {
   nosqlDb: NoSQLDBConfig;
   // app: AppConfig;
   redis: RedisConfig;
+  blockfrost: BlockfrostConfig;
 }
