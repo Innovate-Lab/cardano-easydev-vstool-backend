@@ -2,7 +2,7 @@
 
 import { StatusCodes } from "http-status-codes";
 
-import { ErrorCode } from "@/pkg/e/code";
+import { ErrorCode } from "./code.js";
 
 // interface IAppErrorFactory {
 //     newError(errCode: ErrorCode, httpCode: StatusCodes, msg: string): AppError;

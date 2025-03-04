@@ -1,10 +1,7 @@
-import "module-alias/register";
 import { createServer } from "node:http";
 
-import app from "@/app";
-import { config } from "@/config";
-import { cronJobService } from "@/jobs/cronjob";
-// import { redis } from "@/db/redis_connection";
+import app from "./app.js";
+import { config } from "./config/index.js";
 
 const port = config?.server?.httpPort || 3000;
 
@@ -16,8 +13,6 @@ server.listen(port, () => {
 
 process.on("SIGINT", () => {
   server.close(() => {
-    cronJobService.stop();
-    // redis.disconnect();
     console.log("[server]: Server is closed");
   });
 });

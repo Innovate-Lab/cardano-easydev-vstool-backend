@@ -1,8 +1,8 @@
-import { Datum, UTxO } from "lucid-cardano";
+import { Datum, UTxO, Lucid, Maestro } from "lucid-cardano";
 
 interface ILucidService {
-    connectWalletWithPrivateKey: (privateKey: string) => Promise<void>;
-    connectWalletWithSeedPhrase: (seedPhrase: string) => Promise<void>;
+    connectWalletWithPrivateKey: (privateKey: string) => Promise<string>;
+    connectWalletWithSeedPhrase: (seedPhrase: string) => Promise<string>;
     getUTxOs: (address: string) => Promise<UTxO[]>;
     getDatum: (datumHash: string) => Promise<Datum>;
     generatePrivateKey: () => Promise<string>;
@@ -10,10 +10,8 @@ interface ILucidService {
 }
 
 class LucidService implements ILucidService {
-    private initLucid = async () => {
+    initLucid = async () => {
         try {
-            const { Lucid, Maestro } = await (eval('import("lucid-cardano")') as Promise<any>);
-
             const lucid = await Lucid.new(
                 new Maestro({
                     network: "Preprod",
@@ -44,7 +42,7 @@ class LucidService implements ILucidService {
     connectWalletWithSeedPhrase = async (seedPhrase: string) => {
         try {
             const lucid = await this.initLucid();
-            lucid.selectWalletFromSeedPhrase(seedPhrase);
+            lucid.selectWalletFromSeed(seedPhrase);
             const address = await lucid.wallet.address();
             return address;
         } catch (error) {

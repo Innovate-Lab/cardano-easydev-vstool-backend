@@ -69,68 +69,6 @@ export interface RedisConfig {
   idleTimeout: number;
 }
 
-// export interface AWSConfig {
-//     accessKey: string;
-//     secretKey: string;
-//     region: string;
-// }
-
-// export interface EmailConfig {
-//     provider: string;
-//     from: string;
-//     replyTo: string;
-//     redirectClientURI: string;
-//     tokenExpireIn: number;
-//     resendAfter: number;
-// }
-
-// export interface UploadConfig {
-//     uploadProvider: string;
-//     uploadLocalDir: string;
-//     uploadS3BucketName: string;
-//     uploadS3PathPrefix: string;
-//     uploadBunnyApiKey: string;
-//     uploadBunnyApiURI: string;
-//     uploadBunnyLibraryID: string;
-//     uploadBunnyIFrameURL: string;
-//     uploadBunnyIFrameAuthKey: string;
-//     bunnyIFrameTokenExpireIn: number;
-// }
-
-// export interface GoogleConfig {
-//     clientID: string;
-//     clientSecret: string;
-//     redirectURI: string;
-//     tokenURL: string;
-//     userDataURL: string;
-// }
-
-// export interface PaymentConfig {
-//     sepayURI: string;
-// }
-
-export interface SentryConfig {
-  dsn: string;
-}
-
-export interface OpenEdu101Config {
-  baseURL: string;
-  xOrigin: string;
-  xReferrer: string;
-}
-
-export interface RapidAPIConfig {
-  key: string;
-  host: string;
-  hostCmtAndQuote: string;
-}
-export interface TelegramConfig {
-  apiTelegram: string;
-}
-export interface SecurityConfig {
-  secret: string;
-}
-
 export interface Config {
   server: ServerConfig;
   // websocket: WebSocketConfig;
@@ -138,14 +76,4 @@ export interface Config {
   nosqlDb: NoSQLDBConfig;
   // app: AppConfig;
   redis: RedisConfig;
-  // aws: AWSConfig;
-  // email: EmailConfig;
-  // upload: UploadConfig;
-  // google: GoogleConfig;
-  // payment: PaymentConfig;
-  sentry: SentryConfig;
-  openedu101: OpenEdu101Config;
-  rapidAPI: RapidAPIConfig;
-  telegram: TelegramConfig;
-  security: SecurityConfig;
 }

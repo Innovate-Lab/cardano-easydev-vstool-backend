@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 
-import { CustomExpress } from "@/pkg/app/response";
-import { lucidService } from "@/services/lucid";
+import { CustomExpress } from "../pkg/app/response.js";
+import { lucidService } from "../services/lucid.js";
 
 const generatePrivateKey: RequestHandler = async (req, res, next) => {
     const appExpress = new CustomExpress(req, res, next);
