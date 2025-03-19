@@ -1,22 +1,16 @@
-import "@/config/sentry";
-
 import compression from "compression";
 import express, { Request, Response, Express, NextFunction } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
-import router from "./routes";
 import cors from "cors";
 import { v4 as uuidv4 } from "uuid";
 
-import { AppError } from "@/pkg/e/app_error";
-import { ErrorCode } from "@/pkg/e/code";
-import { ErrorMessages } from "@/pkg/e/msg";
-import { CustomExpress } from "@/pkg/app/response";
-import { logger } from "@/pkg/log/logger";
-import { Header } from "@/types/request/header";
-import { cronJobService } from "@/jobs/cronjob";
-
-import "@/config";
+import router from "./routes/index.js";
+import { AppError } from "./pkg/e/app_error.js";
+import { ErrorCode } from "./pkg/e/code.js";
+import { ErrorMessages } from "./pkg/e/msg.js";
+import { CustomExpress } from "./pkg/app/response.js";
+import { logger } from "./pkg/log/logger.js";
 
 const app: Express = express();
 
@@ -30,8 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // request id for tracing (logging) request
 app.use((req, res, next) => {
-  const requestId = (req.headers[Header.X_REQUEST_ID] as string) || uuidv4();
-  req.requestId = requestId;
+  const requestId = uuidv4();
   logger.info(`input params ::${req.method}::`, {
     metadata: req.method === "POST" ? req.body : req.query,
     requestId,
@@ -39,15 +32,6 @@ app.use((req, res, next) => {
   });
   next();
 });
-
-// init db
-// import "./db/mongodb_connection";
-
-// init redis
-// import "./db/redis_connection";
-
-// Cron job
-// cronJobService.run();
 
 // init routes
 app.use("", router);
@@ -71,7 +55,6 @@ app.use((err: AppError, req: Request, res: Response, _next: NextFunction) => {
       message: err.msg,
       stack: err.stack,
     },
-    requestId: req.requestId,
     context: req.path,
   });
   const appExpress = new CustomExpress(req, res, _next);
