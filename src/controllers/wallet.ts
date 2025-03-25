@@ -72,13 +72,26 @@ const getNFTsByAddress: RequestHandler = async (req, res, next) => {
     });
 };
 
+const getTransactionsByAddress: RequestHandler = async (req, res, next) => {
+    const appExpress = new CustomExpress(req, res, next);
+
+    const { address } = req.query as { address: string };
+
+    const transactions = await blockforstService.getTransactions(address);
+
+    appExpress.response201({
+        transactions
+    });
+};
+
 const walletController = {
     generatePrivateKey,
     generateSeedPhrase,
     connectWalletWithPrivateKey,
     connectWalletWithSeedPhrase,
     getUtxosByAddress,
-    getNFTsByAddress
+    getNFTsByAddress,
+    getTransactionsByAddress
 };
 
 export { walletController };
