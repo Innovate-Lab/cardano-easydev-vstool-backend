@@ -15,5 +15,7 @@ router.get("/utxos", walletController.getUtxosByAddress)
 
 router.get("/nfts", walletController.getNFTsByAddress)
 
+router.get("/transactions", walletController.getTransactionsByAddress)
+
 export default router;
 
