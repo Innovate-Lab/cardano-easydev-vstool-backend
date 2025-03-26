@@ -84,6 +84,22 @@ const getTransactionsByAddress: RequestHandler = async (req, res, next) => {
     });
 };
 
+const getUtxosUsingLucid: RequestHandler = async (req, res, next) => {
+    const appExpress = new CustomExpress(req, res, next);
+
+    const { address } = req.query as { address: string };
+
+    const utxos = await lucidService.getUTxOs(address);
+
+    const utxosString = JSON.stringify(utxos, (key, value) =>
+        typeof value === "bigint" ? Number(value) : value,
+    );
+
+    appExpress.response201({
+        utxos: JSON.parse(utxosString)
+    });
+};
+
 const walletController = {
     generatePrivateKey,
     generateSeedPhrase,
@@ -91,7 +107,8 @@ const walletController = {
     connectWalletWithSeedPhrase,
     getUtxosByAddress,
     getNFTsByAddress,
-    getTransactionsByAddress
+    getTransactionsByAddress,
+    getUtxosUsingLucid
 };
 
 export { walletController };

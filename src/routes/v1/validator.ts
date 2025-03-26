@@ -17,4 +17,14 @@ router.post("/address", async (req, res, next) => {
     appExpress.response201({ contractAddress });
 });
 
+router.post("/execute", async (req, res, next) => {
+    const appExpress = new CustomExpress(req, res, next);
+
+    const { datumOrRedeemer } = req.body;
+
+    const txHash = await lucidService.executeTransaction(datumOrRedeemer);
+
+    appExpress.response201({ txHash });
+});
+
 export default router;
