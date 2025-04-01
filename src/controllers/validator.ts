@@ -25,12 +25,16 @@ const executeTransaction: RequestHandler = async (req, res, next) => {
     try {
         const appExpress = new CustomExpress(req, res, next);
 
-        const { datumOrRedeemer, contractAddress, seedPhrase } = req.body;
-        const unitsQuantity = {
-            lovelace: BigInt(req.body.unitsQuantity.lovelace)
-        };
+        const { datumOrRedeemer, contractAddress, seedPhrase, isLock, validator } = req.body;
 
-        const txHash = await lucidService.executeTransaction(datumOrRedeemer, contractAddress, unitsQuantity, seedPhrase);
+        let unitsQuantity;
+        if (isLock) {
+            unitsQuantity = {
+                lovelace: BigInt(req.body.unitsQuantity.lovelace)
+            };
+        }
+
+        const txHash = await lucidService.executeTransaction(datumOrRedeemer, contractAddress, unitsQuantity, seedPhrase, isLock, validator);
 
         appExpress.response201({ txHash });
     } catch (error) {

@@ -118,9 +118,9 @@ class LucidService implements ILucidService {
         }
     }
 
-    executeTransaction = async (data: any, contractAddress: string, unitsQuantity: any, seedPhrase: string) => {
+    executeTransaction = async (data: any, contractAddress: string, unitsQuantity: any, seedPhrase: string, isLock: boolean, validator: any) => {
         try {
-            const datumObject = data.reduce((acc: any, field: any) => {
+            const datumOrRedeemerObject = data.reduce((acc: any, field: any) => {
                 if (field.dataType === 'integer') {
                     acc[field.title] = BigInt(field.value) * BigInt(1000000);
                 } else {
@@ -131,19 +131,26 @@ class LucidService implements ILucidService {
 
             // Use dynamic schema
             const correctData = Data.to(
-                datumObject,
+                datumOrRedeemerObject,
                 lucidService.generateSchemaObj(data)
             );
 
             const lucid = await this.initLucid();
             lucid.selectWalletFromSeed(seedPhrase);
 
-            const tx = await lucid?.newTx()
+            let tx;
+            if (isLock) {
+                tx = await lucid?.newTx()
                 .payToContract(
                     contractAddress,
                     { inline: correctData },
                     unitsQuantity
                 ).complete();
+            } else {
+                const address = await lucid.wallet.address();
+                const utxos = await lucid?.utxosAt(contractAddress);
+                tx = await lucid?.newTx().collectFrom([utxos[0]], correctData).attachSpendingValidator(validator).addSigner(address).complete();
+            }
 
             const signedTx = await tx.sign().complete();
             const hash = await signedTx.submit();
