@@ -19,5 +19,7 @@ router.get("/nfts", walletController.getNFTsByAddress)
 
 router.get("/transactions", walletController.getTransactionsByAddress)
 
+router.get("/pub-key-hash", walletController.getPubKeyHash)
+
 export default router;
 

@@ -114,7 +114,7 @@ class LucidService implements ILucidService {
             const lucid = await this.initLucid();
             return await lucid.utils.getAddressDetails(address).paymentCredential?.hash;
         } catch (error) {
-            throw error;
+            throw AppError.newError500(ErrorCode.GET_PUB_KEY_HASH_ERROR, "get pub key hash error: " + (error as Error).message);
         }
     }
 

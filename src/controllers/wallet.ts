@@ -124,6 +124,19 @@ const getUtxosUsingLucid: RequestHandler = async (req, res, next) => {
     }
 };
 
+const getPubKeyHash: RequestHandler = async (req, res, next) => {
+    const appExpress = new CustomExpress(req, res, next);
+    try {
+        const { address } = req.query as { address: string };
+
+        const pubKeyHash = await lucidService.getPubKeyHash(address);
+
+        appExpress.response201({ pubKeyHash });
+    } catch (error) {
+        next(error);
+    }
+};
+
 const walletController = {
     generatePrivateKey,
     generateSeedPhrase,
@@ -132,7 +145,8 @@ const walletController = {
     getUtxosByAddress,
     getNFTsByAddress,
     getTransactionsByAddress,
-    getUtxosUsingLucid
+    getUtxosUsingLucid,
+    getPubKeyHash
 };
 
 export { walletController };
