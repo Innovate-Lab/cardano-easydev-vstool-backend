@@ -25,9 +25,12 @@ const executeTransaction: RequestHandler = async (req, res, next) => {
     try {
         const appExpress = new CustomExpress(req, res, next);
 
-        const { datumOrRedeemer } = req.body;
+        const { datumOrRedeemer, contractAddress, seedPhrase } = req.body;
+        const unitsQuantity = {
+            lovelace: BigInt(req.body.unitsQuantity.lovelace)
+        };
 
-        const txHash = await lucidService.executeTransaction(datumOrRedeemer);
+        const txHash = await lucidService.executeTransaction(datumOrRedeemer, contractAddress, unitsQuantity, seedPhrase);
 
         appExpress.response201({ txHash });
     } catch (error) {

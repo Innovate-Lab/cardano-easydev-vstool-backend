@@ -118,7 +118,7 @@ class LucidService implements ILucidService {
         }
     }
 
-    executeTransaction = async (data: any) => {
+    executeTransaction = async (data: any, contractAddress: string, unitsQuantity: any, seedPhrase: string) => {
         try {
             const datumObject = data.reduce((acc: any, field: any) => {
                 if (field.dataType === 'integer') {
@@ -129,35 +129,28 @@ class LucidService implements ILucidService {
                 return acc;
             }, {});
 
-            // const ownerPubKeyHash = await lucid?.utils.getAddressDetails(address).paymentCredential?.hash;
-
             // Use dynamic schema
             const correctData = Data.to(
                 datumObject,
                 lucidService.generateSchemaObj(data)
             );
 
-            // const correctData = Data.to(
-            //   {
-            //     owner: ownerPubKeyHash
-            //   },
-            //   generateDatumSchema(data)
-            // );
+            const lucid = await this.initLucid();
+            lucid.selectWalletFromSeed(seedPhrase);
 
-            // const tx = await lucid?.newTx()
-            //     .payToContract(
-            //         contractAddress,
-            //         { inline: correctData },
-            //         unitsQuantity
-            //     ).complete();
+            const tx = await lucid?.newTx()
+                .payToContract(
+                    contractAddress,
+                    { inline: correctData },
+                    unitsQuantity
+                ).complete();
 
-            // const signedTx = await tx.sign().complete();
-            // const hash = await signedTx.submit();
-            // console.log(hash);
+            const signedTx = await tx.sign().complete();
+            const hash = await signedTx.submit();
 
-            return correctData;
+            return hash;
         } catch (error) {
-            console.error('Transaction failed:', error);
+            throw AppError.newError500(ErrorCode.EXECUTE_TRANSACTION_ERROR, "execute transaction error: " + (error as Error).message);
         }
     };
 }
