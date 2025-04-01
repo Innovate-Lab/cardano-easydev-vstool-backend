@@ -1,5 +1,7 @@
 import { Datum, UTxO, Lucid, Maestro, Data, fromText } from "lucid-cardano";
 import { SchemaField } from "../types/api/lucid";
+import { AppError } from "../pkg/e/app_error.js";
+import { ErrorCode } from "../pkg/e/code.js";
 
 interface ILucidService {
     connectWalletWithPrivateKey: (privateKey: string) => Promise<string>;
@@ -24,7 +26,7 @@ class LucidService implements ILucidService {
 
             return lucid;
         } catch (error) {
-            throw error;
+            throw AppError.newError500(ErrorCode.LUCID_ERROR, "lucid error: " + (error as Error).message);
         }
     }
 
@@ -36,7 +38,7 @@ class LucidService implements ILucidService {
             const address = await lucid.wallet.address();
             return address;
         } catch (error) {
-            throw error;
+            throw AppError.newError500(ErrorCode.CONNECT_WALLET_WITH_PRIVATE_KEY_ERROR, "connect wallet with private key error: " + (error as Error).message);
         }
     }
 
@@ -47,7 +49,7 @@ class LucidService implements ILucidService {
             const address = await lucid.wallet.address();
             return address;
         } catch (error) {
-            throw error;
+            throw AppError.newError500(ErrorCode.CONNECT_WALLET_WITH_SEED_PHRASE_ERROR, "connect wallet with seed phrase error: " + (error as Error).message);
         }
     }
 
@@ -57,7 +59,7 @@ class LucidService implements ILucidService {
             const utxos = await lucid.utxosAt(address);
             return utxos;
         } catch (error) {
-            throw error;
+            throw AppError.newError500(ErrorCode.FETCH_UTXOS_ERROR, "fetch utxos error: " + (error as Error).message);
         }
     }
 
@@ -75,7 +77,7 @@ class LucidService implements ILucidService {
             const lucid = await this.initLucid();
             return lucid.utils.generatePrivateKey();
         } catch (error) {
-            throw error;
+            throw AppError.newError500(ErrorCode.GENERATE_PRIVATE_KEY_ERROR, "generate private key error: " + (error as Error).message);
         }
     }
 
@@ -84,7 +86,7 @@ class LucidService implements ILucidService {
             const lucid = await this.initLucid();
             return lucid.utils.generateSeedPhrase();
         } catch (error) {
-            throw error;
+            throw AppError.newError500(ErrorCode.GENERATE_SEED_PHRASE_ERROR, "generate seed phrase error: " + (error as Error).message);
         }
     }
 
