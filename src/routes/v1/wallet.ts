@@ -11,11 +11,15 @@ router.post("/connect-private-key", walletController.connectWalletWithPrivateKey
 
 router.post("/connect-seed-phrase", walletController.connectWalletWithSeedPhrase)
 
+router.get("/utxos-lucid", walletController.getUtxosUsingLucid)
+
 router.get("/utxos", walletController.getUtxosByAddress)
 
 router.get("/nfts", walletController.getNFTsByAddress)
 
 router.get("/transactions", walletController.getTransactionsByAddress)
+
+router.get("/pub-key-hash", walletController.getPubKeyHash)
 
 export default router;
 

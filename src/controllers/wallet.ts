@@ -6,82 +6,135 @@ import { blockforstService } from "../services/blockforst.js";
 
 const generatePrivateKey: RequestHandler = async (req, res, next) => {
     const appExpress = new CustomExpress(req, res, next);
+    try {
+        const privateKey = await lucidService.generatePrivateKey();
 
-    const privateKey = await lucidService.generatePrivateKey();
-
-    appExpress.response201({
-        privateKey
-    });
+        appExpress.response201({
+            privateKey
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
 const generateSeedPhrase: RequestHandler = async (req, res, next) => {
     const appExpress = new CustomExpress(req, res, next);
+    try {
+        const seedPhrase = await lucidService.generateSeedPhrase();
 
-    const seedPhrase = await lucidService.generateSeedPhrase();
-
-    appExpress.response201({
-        seedPhrase
-    });
+        appExpress.response201({
+            seedPhrase
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
 const connectWalletWithPrivateKey: RequestHandler = async (req, res, next) => {
     const appExpress = new CustomExpress(req, res, next);
+    try {
+        const { privateKey } = req.body;
 
-    const { privateKey } = req.body;
+        const address = await lucidService.connectWalletWithPrivateKey(privateKey);
 
-    const address = await lucidService.connectWalletWithPrivateKey(privateKey);
-
-    appExpress.response201({
-        address
-    });
+        appExpress.response201({
+            address
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
 const connectWalletWithSeedPhrase: RequestHandler = async (req, res, next) => {
     const appExpress = new CustomExpress(req, res, next);
+    try {
+        const { seedPhrase } = req.body;
 
-    const { seedPhrase } = req.body;
+        const address = await lucidService.connectWalletWithSeedPhrase(seedPhrase);
 
-    const address = await lucidService.connectWalletWithSeedPhrase(seedPhrase);
-
-    appExpress.response201({
-        address
-    });
+        appExpress.response201({
+            address
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
 const getUtxosByAddress: RequestHandler = async (req, res, next) => {
     const appExpress = new CustomExpress(req, res, next);
+    try {
+        const { address } = req.query as { address: string };
 
-    const { address } = req.query as { address: string };
+        const utxos = await blockforstService.getUtxosByAddress(address);
 
-    const utxos = await blockforstService.getUtxosByAddress(address);
-
-    appExpress.response201({
-        utxos
-    });
+        appExpress.response201({
+            utxos
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
 const getNFTsByAddress: RequestHandler = async (req, res, next) => {
     const appExpress = new CustomExpress(req, res, next);
+    try {
+        const { address } = req.query as { address: string };
 
-    const { address } = req.query as { address: string };
+        const nfts = await blockforstService.getNFTs(address);
 
-    const nfts = await blockforstService.getNFTs(address);
-
-    appExpress.response201({
-        nfts
-    });
+        appExpress.response201({
+            nfts
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
 const getTransactionsByAddress: RequestHandler = async (req, res, next) => {
     const appExpress = new CustomExpress(req, res, next);
+    try {
+        const { address } = req.query as { address: string };
 
-    const { address } = req.query as { address: string };
+        const transactions = await blockforstService.getTransactions(address);
 
-    const transactions = await blockforstService.getTransactions(address);
+        appExpress.response201({
+            transactions
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 
-    appExpress.response201({
-        transactions
-    });
+const getUtxosUsingLucid: RequestHandler = async (req, res, next) => {
+    const appExpress = new CustomExpress(req, res, next);
+    try {
+        const { address } = req.query as { address: string };
+
+        const utxos = await lucidService.getUTxOs(address);
+
+        const utxosString = JSON.stringify(utxos, (key, value) =>
+            typeof value === "bigint" ? Number(value) : value,
+        );
+
+        appExpress.response201({
+            utxos: JSON.parse(utxosString)
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const getPubKeyHash: RequestHandler = async (req, res, next) => {
+    const appExpress = new CustomExpress(req, res, next);
+    try {
+        const { address } = req.query as { address: string };
+
+        const pubKeyHash = await lucidService.getPubKeyHash(address);
+
+        appExpress.response201({ pubKeyHash });
+    } catch (error) {
+        next(error);
+    }
 };
 
 const walletController = {
@@ -91,7 +144,9 @@ const walletController = {
     connectWalletWithSeedPhrase,
     getUtxosByAddress,
     getNFTsByAddress,
-    getTransactionsByAddress
+    getTransactionsByAddress,
+    getUtxosUsingLucid,
+    getPubKeyHash
 };
 
 export { walletController };
