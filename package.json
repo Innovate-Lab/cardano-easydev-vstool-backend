@@ -1,6 +1,6 @@
 {
   "name": "cardano-easydev-vs-tool-be",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "main": "server.ts",
   "type": "module",
   "scripts": {
